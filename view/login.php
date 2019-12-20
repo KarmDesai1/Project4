@@ -2,8 +2,8 @@
 require('view/template/header.php');
 ?>
     <h1>Login Form</h1>
-    <form action = "../index.php" method="post">
-        <input type="hidden" name="action" value="validate_login">
+    <form action = "index.php" method="post">
+        <input type="hidden" name="action" value="login">
 
         <div class="form-group">
 <!--            //user input for email-->
@@ -20,7 +20,7 @@ require('view/template/header.php');
             <button type="submit" class="button is-primary"> Login</button>
             <br>
             <button type="button"><a href=".?action=display_registration">New User? Register Here</a> </button>
-            <form action="../index.php" method="post">
+
         </div>
     </form>
 

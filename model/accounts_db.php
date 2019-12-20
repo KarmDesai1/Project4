@@ -18,6 +18,7 @@
             $statement->closeCursor();
             return $userId;
         }
+
         if ($isValidLogin == True) {
             $query = $DB->prepare("INSERT INTO accounts (email_address,fname,lname,birthday,password) VALUES
 VALUES(:email_address, :fname, :lname, :birthday, :password)");

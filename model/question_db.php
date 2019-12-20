@@ -6,9 +6,10 @@ function get_questions($ownerId)
     $statement=$db->prepare($query);
     $statement->bindValue(':ownerId', $ownerId);
     $statement->execute();
-    $questions = $statement->fetchAll();
+    $quest = $statement->fetchAll();
     $statement->execute();
-    return $questions;
+    return $quest;
+
 }
 function deleteQuestion($ownerId) {
     global $db;

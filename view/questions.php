@@ -1,32 +1,24 @@
-<?php
-include('template/header.php'); ?>
-    <h1>New Question Form</h1>
-    <form action="index.php" method="post">
-        <input type="hidden" name="action" value="validate_question">
-        <div id="container">
+<?php include('template/header.php');
+$quest=get_questions($userId);
+?>
 
-            <div class="form-group">
-                <label>Owner ID</label>
-                <input type="text" name="ownerId"><br>
-            </div>
-            <div class="form-group">
-                <label>The Question Name </label>
-                <input type="text" name="Name"><br>
-            </div>
-            <div class="form-group">
-                <label> The Question Body</label>
-                <input type="text" name="Body"><br>
-            </div>
-            <div class="form-group">
-                <label> Question Skill </label>
-                <input type="text" name="Skills"><br>
-            </div>
-            <div id="lower">
-                <div id="buttons">
-                    <input type="submit" value="submit"><br>
-                </div>
-            </div>
-        </div>
-    </form>
+    <h2>Questions for User with ID: <?php echo $userId; ?></h2>
 
-<? include('template/footer.php'); ?>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Body</th>
+        </tr>
+        <?php foreach ($quest as $question) : ?>
+            <tr>
+                <td><?php echo $question['id']; ?></td>
+                <td><?php echo $question['title']; ?></td>
+                <td><?php echo $question['body']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <button type="button"><a href=".?action=display_new_question">Add Question</a> </button>
+    <button type="button"><a href=".?action=display_login">Log OUT</a> </button>
+
+<?php include('template/footer.php'); ?>
