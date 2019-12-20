@@ -1,9 +1,8 @@
 <?php
-
-require('views/template/header.php');
+require('view/template/header.php');
 ?>
     <h1>Login Form</h1>
-    <form action = "index.php" method="post">
+    <form action = "../index.php" method="post">
         <input type="hidden" name="action" value="validate_login">
 
         <div class="form-group">
@@ -21,7 +20,8 @@ require('views/template/header.php');
             <button type="submit" class="button is-primary"> Login</button>
             <br>
             <button type="button"><a href=".?action=display_registration">New User? Register Here</a> </button>
-            <form action="index.php" method="post">
+            <form action="../index.php" method="post">
         </div>
     </form>
-<?php include ('views/template/footer.php'); ?>
+
+<?php include ('view/template/footer.php'); ?>

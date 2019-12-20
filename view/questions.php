@@ -1,1 +1,32 @@
 <?php
+include('template/header.php'); ?>
+    <h1>New Question Form</h1>
+    <form action="index.php" method="post">
+        <input type="hidden" name="action" value="validate_question">
+        <div id="container">
+
+            <div class="form-group">
+                <label>Owner ID</label>
+                <input type="text" name="ownerId"><br>
+            </div>
+            <div class="form-group">
+                <label>The Question Name </label>
+                <input type="text" name="Name"><br>
+            </div>
+            <div class="form-group">
+                <label> The Question Body</label>
+                <input type="text" name="Body"><br>
+            </div>
+            <div class="form-group">
+                <label> Question Skill </label>
+                <input type="text" name="Skills"><br>
+            </div>
+            <div id="lower">
+                <div id="buttons">
+                    <input type="submit" value="submit"><br>
+                </div>
+            </div>
+        </div>
+    </form>
+
+<? include('template/footer.php'); ?>

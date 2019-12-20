@@ -4,7 +4,7 @@ $_SESSION['authenticated']=true;
 $_SESSION['name']=htmlentities($_POST['name']);
 require('model/database.php');
 require('model/accounts_db.php');
-require('model/questions_db.php');
+require('model/question_db.php');
 
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
@@ -60,7 +60,7 @@ switch ($action) {
             echo 'owner id not available';
         } else {
             $questions = get_questions($userId);
-            include('views/display_question.php');
+            include('view/questions.php');
             echo $userId;
         }
         break;
@@ -69,41 +69,42 @@ switch ($action) {
         include('view/registration.php');
         break;
     }
-    case 'register':{
-        break;
-    }
+//    case 'register':{
+//
+//        break;
+//    }
     case 'display_question':{
         include('view/questions.php');
         break;
     }
     case 'display_new_question':{
-        include('view/new_questions.php');
+        include('view/new_question.php');
         break;
     }
-    case 'create_new_question':{
-        break;
-    }
+//    case 'create_new_question':{
+//
+//    }
     case 'display_edit_question':{
         include('view/edit_question.php');
         break;
     }
-    case 'edit_question':{
-
-    }
-    case 'delete_question':{
-
-    }
-    case 'up_vote':{
-
-    }
-    case 'down_vote':{
-
-    }
-    case 'update_question_list':{
-
-    }
-    case 'question_view':{
-
-
-    }
+//    case 'edit_question':{
+//
+//    }
+//    case 'delete_question':{
+//
+//    }
+//    case 'up_vote':{
+//
+//    }
+//    case 'down_vote':{
+//
+//    }
+//    case 'update_question_list':{
+//
+//    }
+//    case 'question_view':{
+//
+//
+//    }
 }
