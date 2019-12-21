@@ -1,10 +1,14 @@
 <?php
-require ('template/')
+include('template/header.php');
 ?>
 <h1>New Question Form</h1>
     <form action="index.php" method="post">
-        <input type="hidden" name="action" value="create_new_question">
+        <input type="hidden" name="action" value="edit_question">
         <div id="container">
+            <div class="form-group">
+                <label>Question ID</label>
+                <input type="text" name="Id" <br>
+            </div>
             <div class="form-group">
                 <label>Owner ID</label>
                 <input type="text" name="ownerId" <br>
@@ -26,3 +30,5 @@ require ('template/')
             </div>
         </div>
     </form>
+
+<?php include('template/footer.php');

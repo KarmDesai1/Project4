@@ -1,12 +1,12 @@
 <?php include('template/header.php');
 //require 'model/question_db.php';
-$_SESSION['userId'] = $userId;
-$questions=get_questions($userId);
+$questions=getAll_questions();
 ?>
+    <form action="index.php" method="post">
         <input type="hidden" name="action" value="vote">
         <input type="hidden" name="action" value="display_users">
 
-    <h2>Questions for User with ID: <?php echo $userId; ?></h2>
+    <h2>Questions for All Users</h2>
 
     <table class="table">
         <tr>
@@ -14,7 +14,6 @@ $questions=get_questions($userId);
             <th>Name</th>
             <th>Body</th>
             <th>Skills</th>
-            <th>UpVote/DownVote</th>
             <th>View</th>
             <th>Delete</th>
         </tr>
@@ -28,9 +27,6 @@ $questions=get_questions($userId);
                     <form action="index.php" method="post">
                         <input type="hidden" name="action" value="">
                         <input type="hidden" name="questionId" value="<?php echo $question['id'];?>">
-                        <input type="hidden" name="userId" value="<?php echo $userId ?>">
-                        <input type="hidden" name="action" value="vote">
-                        <input type="hidden" name="action" value="display_users">
 
                         <button><input type="submit" class="btn edit" value="View" ></button>
                     </form>
@@ -38,8 +34,8 @@ $questions=get_questions($userId);
                 <td>
                     <form action="index.php" method="post">
                         <input type="hidden" name="action" value="delete_question">
-                        <input type="hidden" name="id" value="<?php echo $question['id'];?>">
-                        <input type="hidden" name="userId" value="<?php echo $userId?>">
+                        <input type="hidden" name="questionId" value="<?php echo $question['id'];?>">
+
 
                         <button><input class="btn" type="submit" value="Delete"> </button>
                     </form>
@@ -49,14 +45,12 @@ $questions=get_questions($userId);
                 <button type="submit" name="downvote" value=-1><img src="/images/downvote.png" style="width:30px;height:30px" alt="SomeAlternateText"></button>
 
             </tr>
-
         <?php endforeach; ?>
     </table>
     <button type="button"><a href=".?action=display_new_question">Add Question</a> </button>
     <button type="button"><a href=".?action=display_login">Delete Question</a> </button>
     <button type="button"><a href=".?action=display_login">Log OUT</a> </button>
-    <button type="button"><a href=".?action=display_allQuestions">All Questions</a></button>
-
+    <button type="button"><<a href=".?action=display_questions<?php echo $userId; ?>"><a>User Questions</a></button>
 
 
 <?php include('template/footer.php'); ?>

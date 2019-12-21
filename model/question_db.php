@@ -8,6 +8,7 @@ function get_questions($ownerId)
     $statement->execute();
     $quest = $statement->fetchAll();
     $statement->execute();
+    $statement->closeCursor();
     return $quest;
 
 }
@@ -93,7 +94,7 @@ function editQuestion(&$title, &$body,&$skills)
             return false;
         }
         foreach ($rows as $row) {
-            array_push($answer, new Question($row["id"], $row["title"], $row["account_email"], $row["body"], date_create($row["created_at"]), explode(',', $row["skills"])));
+            array_push($answer, new Question($row["id"], $row["title"], $row["body"]), explode(',', $row["skills"]));
         }
         $query->closeCursor();
         return $answer;

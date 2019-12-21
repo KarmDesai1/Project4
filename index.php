@@ -1,10 +1,10 @@
 <?php
 session_start();
-//$_SESSION['authenticated']=true;
-//$_SESSION['name']=htmlentities($_POST['name']);
+
 require('model/database.php');
 require('model/accounts_db.php');
 require('model/question_db.php');
+
 
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
@@ -80,29 +80,35 @@ switch ($action) {
         $valid = true;
         //Validate data in the form
         if (empty($email_address)) {
-            echo("Please type a email in");
+            $error=("Please type a email in");
+            echo $error;
             $valid = false;
         } else if (strpos($email_address, '@') === false) {
-            echo('There is no @ in the email');
+            $error=('There is no @ in the email');
+            echo $error;
             $valid = false;
         }
         if (empty($password)) {
             echo("Please type a password in");
             $valid = false;
         } elseif (strlen($password) <= 7) {
-            echo("The Password needs to greater than 8 characters");
+            $error = ("The Password needs to greater than 8 characters");
+            echo $error;
             $valid = false;
         }
         if (empty($fname)) {
-            echo("Please Type a Name in");
+            $error =("Please Type a Name in");
+            echo $error;
             $valid = false;
         }
         if (empty($lname)) {
-            echo("Please Type Last Name in");
+            $error=("Please Type Last Name in");
+            echo $error;
             $valid = false;
         }
         if (empty($birthday)) {
-            echo("Please Type Birthday");
+            $error = ("Please Type Birthday");
+            echo $error;
             $valid = false;
         }
         if ($valid = true) {
@@ -124,6 +130,9 @@ switch ($action) {
 //Close the database
             $statement->closeCursor();
         }
+        else{
+            $error = 'Can not insert into query';
+        }
         header("Location: .?action=display_login");
         break;
     }
@@ -136,10 +145,8 @@ switch ($action) {
         break;
     }
     case 'create_new_question':{
-        $userId = validate_login($email_address, $password);
-        echo "The ID for this user is: $userId";
-        $account = unserialize($_SESSION['userId']);
-
+        session_start();
+        $userId = $_SESSION['userId'];
 
         $Name = filter_input(INPUT_POST, "Name");
         $Body = filter_input(INPUT_POST, "Body");
@@ -217,7 +224,8 @@ switch ($action) {
     case 'edit_question':{
         global $db;
         $ownerId = filter_input(INPUT_POST, 'ownerId');
-        $title = filter_input(INPUT_POST, 'title');
+        $id = filter_input(INPUT_POST, 'id');
+//        $title = filter_input(INPUT_POST, 'title');
         $body = filter_input(INPUT_POST, 'body');
         $skills = explode(",", filter_input(INPUT_POST, 'skills'));
         $title = strlen($title) > 2;
@@ -230,17 +238,20 @@ switch ($action) {
             $query->bindValue(':ownerId', $ownerId);
             $query->bindValue(':skills', implode(',', $skills));
         }
+        else{
+            $error = "Can not edit question";
+            echo $error;
+        }
         break;
     }
     case 'delete_question':{
 
         global $db;
-        $id = filter_input(INPUT_POST, 'id');
-        $query = 'DELETE from questions WHERE id =: id';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-        $statement->closeCursor();
+        $userId = $_SESSION['userId'];
+        $questionId = filter_input(INPUT_POST, 'questionId');
+        $userId = filter_input(INPUT_POST, 'userId');
+        deleteQuestion($questionId);
+
         break;
     }
     case 'vote':
@@ -252,16 +263,51 @@ switch ($action) {
         } else if (isset($_POST['downvote'])) {
             $query ='UPDATE question SET score=downvote + 1,WHERE ownerid=$userId AND :id=$id ';
         }
-        $statement->execute();
-        $statement->closeCursor();
+        else{
+            $error = 'You already voted';
+            echo $error;
+        }
         break;
     }
 
-//    case 'update_question_list':{
-//
-//    }
-////    case 'question_view':{
-//
-//
-//    }
+    case 'question_view':{
+        $userId = $_SESSION['userId'];
+        $id = filter_input(INPUT_GET,'id');
+        $userId = filter_input(INPUT_GET, 'userId');
+        if ($id == NULL )
+        {
+            $error = 'User ID not registered';
+            echo $error;
+        }
+        else
+        {
+            $question = (id);
+        }
+        break;
+    }
+
+    case 'display_allQuestions':{
+        include('view/all_Questions.php');
+        break;
+    }
+
+    case 'AllQuestions':
+    {
+        $all_questions=getAll_questions();
+        echo $all_questions;
+        $userId = $_SESSION['userId'];
+        $userId = filter_input(INPUT_GET,'userId');
+        if ($userId == NULL )
+        {
+            $error = 'User ID is not available';
+            echo $error;
+        }
+        else
+        {
+            $question = getquestion($userId);
+            include('model/question_db.php');
+        }
+        break;
+    }
+
 }

@@ -1,5 +1,4 @@
 <?php
-
 {
     function validate_login($email_address, $password)
     {
@@ -38,3 +37,7 @@ VALUES(:email_address, :fName, :lName, :dob, :password)");
         }
     }
 }
+
+
+
+
