@@ -59,7 +59,7 @@ function editQuestion(&$title, &$body,&$skills)
         $account = unserialize($_SESSION["account"]);
         if ($title && $body && $skills) {
             // TODO: Create the question
-            $query = $db->prepare("INSERT INTO questions (account_email, title, body, skills)
+            $query = $db->prepare("INSERT INTO questions (email_address, title, body, skills)
                 VALUES(:email, :title, :body, :skills)");
             $query->bindValue(':email', $account->getEmail());
             $query->bindValue(':title', $title);
@@ -81,7 +81,7 @@ function editQuestion(&$title, &$body,&$skills)
     {
         global $db;
         $answer = [];
-        $account = unserialize($_SESSION["account"]);
+        $account = unserialize($_SESSION["userId"]);
         $query = $db->prepare("SELECT * FROM questions WHERE email_address = :email_address");
         $query->bindValue(':email_address', $account->getEmail());
         try {

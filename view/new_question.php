@@ -1,5 +1,5 @@
 <?php include('template/header.php');
-
+$account = unserialize($_SESSION['userId']);
 ?>
 
     <h1>New Question Form</h1>

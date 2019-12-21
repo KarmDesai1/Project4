@@ -18,18 +18,17 @@
             $statement->closeCursor();
             return $userId;
         }
-
         if ($isValidLogin == True) {
-            $query = $DB->prepare("INSERT INTO accounts (email_address,fname,lname,birthday,password) VALUES
-VALUES(:email_address, :fname, :lname, :birthday, :password)");
-            $query->bindValue(':birthday', $birthday);
+            $query = $DB->prepare("INSERT INTO accounts (email,fname,lname,birthday,password) VALUES
+VALUES(:email_address, :fName, :lName, :dob, :password)");
+            $query->bindValue(':birthday', $dob);
             $query->bindValue(':email', $email_address);
             $query->bindValue(':fisrt', $fname);
             $query->bindValue(':last', $lname);
             $query->bindValue(':password', $password);
             try {
                 if ($query->execute()) {
-                    return new Account($email_address, $fname, $lname, $birthday);
+                    return new Account($email_address, $fName, $lName, $dob);
                 }
             } catch (PDOException $err) {
                 echo "Account creation failed: " . $err->getMessage();

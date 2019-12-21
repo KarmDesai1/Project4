@@ -6,13 +6,13 @@ require('template/header.php');
         <input type="hidden" name="action" value="register">
         <div id="data">
             <label> First Name </label>
-            <input type="text" name="first"><br>
+            <input type="text" name="fName"><br>
 
             <label> Last Name </label>
-            <input type="text" name="last"><br>
+            <input type="text" name="lName"><br>
 
             <label> Birthday </label>
-            <input type="date" name="birthday" value="yyyy-dd-mm"><br>
+            <input type="date" name="dob" value="yyyy-dd-mm"><br>
 
             <label> Email </label>
             <input type="email" name="email_address"><br>

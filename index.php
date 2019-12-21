@@ -1,7 +1,7 @@
 <?php
 session_start();
-$_SESSION['authenticated']=true;
-$_SESSION['name']=htmlentities($_POST['name']);
+//$_SESSION['authenticated']=true;
+//$_SESSION['name']=htmlentities($_POST['name']);
 require('model/database.php');
 require('model/accounts_db.php');
 require('model/question_db.php');
@@ -73,9 +73,9 @@ switch ($action) {
         //get information from registration.php (Registration form)
         $email_address = filter_input(INPUT_POST, 'email_address');
         $password = filter_input(INPUT_POST, "password");
-        $first = filter_input(INPUT_POST, "first");
-        $last = filter_input(INPUT_POST, "last");
-        $birthday = filter_input(INPUT_POST, "birthday");
+        $fName = filter_input(INPUT_POST, "fName");
+        $lName = filter_input(INPUT_POST, "lName");
+        $dob = filter_input(INPUT_POST, "dob");
         //Set Validate a boolean  to TRUE
         $valid = true;
         //Validate data in the form
@@ -93,11 +93,11 @@ switch ($action) {
             echo("The Password needs to greater than 8 characters");
             $valid = false;
         }
-        if (empty($first)) {
+        if (empty($fname)) {
             echo("Please Type a Name in");
             $valid = false;
         }
-        if (empty($last)) {
+        if (empty($lname)) {
             echo("Please Type Last Name in");
             $valid = false;
         }
@@ -110,21 +110,21 @@ switch ($action) {
             $query = 'INSERT INTO accounts
     (email, password, fname, lname, birthday)
     VALUES
-    (:email, :password, :fname, :lname, :birthday)';
+    (:email_address, :password, :fName, :lName, :dob)';
 // Create PDO Statement
             $statement = $db->prepare($query);
 //statement-> bind
             $statement->bindValue(':email', $email_address);
             $statement->bindValue(':password', $password);
-            $statement->bindValue(':fname', $first);
-            $statement->bindValue(':lname', $last);
-            $statement->bindValue(':birthday', $birthday);
+            $statement->bindValue(':fname', $fName);
+            $statement->bindValue(':lname', $lName);
+            $statement->bindValue(':birthday', $dob);
 //execute
             $statement->execute();
 //Close the database
             $statement->closeCursor();
-            header("Location: .?action=display_login");
         }
+        header("Location: .?action=display_login");
         break;
     }
     case 'display_question':{
@@ -138,6 +138,7 @@ switch ($action) {
     case 'create_new_question':{
         $userId = validate_login($email_address, $password);
         echo "The ID for this user is: $userId";
+        $account = unserialize($_SESSION['userId']);
 
 
         $Name = filter_input(INPUT_POST, "Name");
@@ -187,7 +188,7 @@ switch ($action) {
         if ($valid = true) {
             //SQL Query
             $query = 'INSERT INTO questions
-    (body, skills, title,ownerId)
+    (body, skills, title, ownerId)
     VALUES
     (:body, :skills, :title, :ownerId)';
     // Create PDO Statement
@@ -198,7 +199,7 @@ switch ($action) {
             $statement->bindValue(':title', $Name);
             $statement->bindValue(':ownerId', $ownerId);
             //$statement->bindValue()
-            echo "$Body, $Skills, $Name, $userId";
+            echo "$Body, $Skills, $Name, $ownerId";
     //execute
             $statement->execute();
     //Close the database
@@ -213,22 +214,53 @@ switch ($action) {
         include('view/edit_question.php');
         break;
     }
-//    case 'edit_question':{
-//
-//    }
-//    case 'delete_question':{
-//
-//    }
-//    case 'up_vote':{
-//
-//    }
-//    case 'down_vote':{
-//
-//    }
+    case 'edit_question':{
+        global $db;
+        $ownerId = filter_input(INPUT_POST, 'ownerId');
+        $title = filter_input(INPUT_POST, 'title');
+        $body = filter_input(INPUT_POST, 'body');
+        $skills = explode(",", filter_input(INPUT_POST, 'skills'));
+        $title = strlen($title) > 2;
+        $body = strlen($body) > 0;
+        $skills = count($skills) > 1;
+        if ($title && $body && $skills) {
+            $query = $db->prepare('UPDATE questions SET title = :title, body= :body, skills =skills WHERE id= :id');
+            $query->bindValue(':title', $title);
+            $query->bindValue(':body', $body);
+            $query->bindValue(':ownerId', $ownerId);
+            $query->bindValue(':skills', implode(',', $skills));
+        }
+        break;
+    }
+    case 'delete_question':{
+
+        global $db;
+        $id = filter_input(INPUT_POST, 'id');
+        $query = 'DELETE from questions WHERE id =: id';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+        $statement->closeCursor();
+        break;
+    }
+    case 'vote':
+    {
+        global $db;
+
+        if (isset($_POST['upvote'])) {
+            $query ='UPDATE question SET score=upvote + 1,WHERE ownerid=$userId AND :id=$id ';
+        } else if (isset($_POST['downvote'])) {
+            $query ='UPDATE question SET score=downvote + 1,WHERE ownerid=$userId AND :id=$id ';
+        }
+        $statement->execute();
+        $statement->closeCursor();
+        break;
+    }
+
 //    case 'update_question_list':{
 //
 //    }
-//    case 'question_view':{
+////    case 'question_view':{
 //
 //
 //    }
